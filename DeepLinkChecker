@@ -1,0 +1,27 @@
+#!/usr/bin/env/ python3
+import requests
+import json
+from bs4 import BeautifulSoup
+
+#Establishing proxies to route requests over a TOR circuit
+proxies= {
+        'http': 'socks5h://127.0.0.1:9050',
+        'https': 'socks5h://127.0.0.1:9050',
+}
+
+#Requesting the URL from the user
+url = input("Enter the deepweb address:") 
+
+#Sending the web request and storing the page sourcecode
+html = requests.get(url, proxies=proxies, verify=False)
+
+#Parsing page sourcecode with beautifulsoup and retrieving the title
+soup = BeautifulSoup(html.text, "html.parser")
+title = ("Page title: ", soup.title.string)
+
+#Checking for response from domain and printing result to standard output
+if html.status_code == 200:
+        print(title)
+        print("is up and responding.")
+else:
+        print("The requested domain is not available. Please try again later.")
