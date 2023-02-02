@@ -9,11 +9,15 @@ proxies= {
         'https': 'socks5h://127.0.0.1:9050',
 }
 
-#Requesting the URL from the user
-url = input("Enter the deepweb address:") 
+# Get the URL file name from the user
+urls_filename = input("Enter the file name containing the URLs: ") 
+
+# Read the URLs from the file
+with open(urls_filename, "r") as file:
+    urls = file.readlines()
 
 #Sending the web request and storing the page sourcecode
-html = requests.get(url, proxies=proxies, verify=False)
+html = requests.get(urls, proxies=proxies, verify=False)
 
 #Parsing page sourcecode with beautifulsoup and retrieving the title
 soup = BeautifulSoup(html.text, "html.parser")
