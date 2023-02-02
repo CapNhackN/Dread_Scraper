@@ -28,4 +28,4 @@ if html.status_code == 200:
         print(title)
         print("is up and responding.")
 else:
-        print("The requested domain is not available. Please try again later.")
+        print("Domain not reachable. Please try again later.")
