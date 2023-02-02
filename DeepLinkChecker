@@ -15,16 +15,40 @@ urls_filename = input("Enter the file name containing the URLs: ")
 with open(urls_filename, "r") as file:
     urls = file.readlines()
 
-#Sending the web request and storing the page sourcecode
-html = requests.get(urls, proxies=proxies, verify=False)
+# Keeping track of failed and successful URLs
+failed_urls = []
+successful_titles = []
 
-#Parsing page sourcecode with beautifulsoup and retrieving the title
-soup = BeautifulSoup(html.text, "html.parser")
-title = ("Page title: ", soup.title.string)
+# Loop through each URL
+for url in urls:
+    # Strip leading/trailing whitespace from the URL
+    url = url.strip()
 
-#Checking for response from domain and printing result to standard output
-if html.status_code == 200:
-        print(title)
-        print("is up and responding.")
+    # Send the web request and store the response
+    html = requests.get(url, proxies=proxies, verify=False)
+
+    # Check the status code of the response
+    if html.status_code == 200:
+        # If the status code is 200, parse the page source code with BeautifulSoup
+        soup = BeautifulSoup(html.text, "html.parser")
+        # Append the title of the page to the list of successful titles
+        successful_titles.append(("Page title: ", soup.title.string))
+    else:
+        # If the status code is not 200, append the URL to the list of failed URLs
+        failed_urls.append(url)
+
+# Print the list of failed URLs
+if failed_urls:
+    print("The following URLs are unreachable:")
+    for url in failed_urls:
+        print(url)
 else:
-        print("Domain not reachable. Please try again later.")
+    print("All pages are up and responding.")
+
+# Print the list of successful titles
+if successful_titles:
+    print("The following pages are up and responding:")
+    for title in successful_titles:
+        print(title)
+else:
+    print("None of the requested pages are responding.")
