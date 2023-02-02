@@ -45,4 +45,4 @@ for url in urls:
         for result in results:
             print(result)
     else:
-        print(f"No results found.")
+        print(f"No results found for URL '{url}'.")
